@@ -1,0 +1,823 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Obligation, Permission and Possibility</title>
+<style>
+:root{
+  --ink:#23313d;
+  --muted:#667786;
+  --bg:#eef3f6;
+  --paper:#ffffff;
+  --blue:#1096a7;
+  --blue-dark:#087585;
+  --blue-soft:#dff4f8;
+  --line:#d7e1e7;
+  --good:#18794e;
+  --good-soft:#edf9f2;
+  --bad:#b42318;
+  --bad-soft:#fff2f0;
+  --warn:#a15c00;
+  --shadow:0 12px 30px rgba(30,52,66,.10);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  color:var(--ink);
+  background:
+    radial-gradient(circle at 10% 0%,rgba(16,150,167,.11),transparent 28rem),
+    linear-gradient(180deg,#f8fbfc 0%,var(--bg) 100%);
+  font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  line-height:1.6;
+}
+button,select,input{font:inherit}
+button,select{touch-action:manipulation}
+.page{width:min(1120px,100%);margin:0 auto;padding:18px}
+.hero,.panel,.theory{
+  background:rgba(255,255,255,.98);
+  border:1px solid var(--line);
+  border-radius:24px;
+  box-shadow:var(--shadow);
+}
+.hero{padding:24px;margin-bottom:18px}
+.eyebrow{
+  color:var(--blue-dark);
+  text-transform:uppercase;
+  font-size:.8rem;
+  letter-spacing:.08em;
+  font-weight:900;
+}
+h1{
+  margin:.3rem 0 .6rem;
+  font-size:clamp(2rem,6vw,4.2rem);
+  line-height:1.04;
+}
+h2{
+  margin:0 0 .7rem;
+  font-size:clamp(1.45rem,4vw,2.2rem);
+  line-height:1.18;
+}
+h3{margin:.2rem 0 .55rem}
+.lead{margin:0;color:var(--muted);font-size:1.05rem}
+.layout{
+  display:grid;
+  grid-template-columns:minmax(280px,.85fr) minmax(0,1.65fr);
+  gap:18px;
+  align-items:start;
+}
+.theory{
+  position:sticky;
+  top:12px;
+  overflow:hidden;
+}
+.theory-title{
+  padding:15px 18px;
+  background:linear-gradient(135deg,var(--blue),#43bbca);
+  color:#fff;
+}
+.theory-body{padding:18px}
+.rule{
+  margin:0 0 14px;
+  padding:13px;
+  border-radius:15px;
+  background:var(--blue-soft);
+  border:1px solid #bfe6ec;
+}
+.rule strong{display:block;margin-bottom:4px}
+.example{
+  margin-top:7px;
+  padding:8px 10px;
+  border-left:4px solid var(--blue);
+  background:#fff;
+  border-radius:0 10px 10px 0;
+}
+.panel{padding:20px;margin-bottom:18px}
+.instruction{
+  margin:10px 0 17px;
+  padding:12px 14px;
+  border-left:5px solid var(--blue);
+  border-radius:0 13px 13px 0;
+  background:var(--blue-soft);
+  font-weight:750;
+}
+.exercise-list{display:grid;gap:12px}
+.item{
+  display:grid;
+  grid-template-columns:auto 1fr;
+  gap:12px;
+  align-items:start;
+  padding:15px;
+  border:1px solid var(--line);
+  border-radius:16px;
+  background:#fff;
+  transition:.15s ease;
+}
+.item.good{border-color:#78b99b;background:var(--good-soft)}
+.item.bad{border-color:#e3a39b;background:var(--bad-soft)}
+.num{
+  display:grid;
+  place-items:center;
+  min-width:34px;
+  height:34px;
+  border-radius:50%;
+  background:var(--blue);
+  color:#fff;
+  font-weight:900;
+}
+.sentence{font-size:1rem}
+.inline-select{
+  display:inline-block;
+  min-width:145px;
+  max-width:100%;
+  min-height:42px;
+  margin:4px 3px;
+  padding:7px 10px;
+  border:1px solid #aebcc6;
+  border-radius:10px;
+  background:#fff;
+  color:var(--ink);
+  font-weight:800;
+}
+.inline-input{
+  width:min(100%,520px);
+  min-height:44px;
+  margin-top:9px;
+  padding:9px 11px;
+  border:1px solid #aebcc6;
+  border-radius:10px;
+  background:#fff;
+  color:var(--ink);
+}
+.feedback{
+  min-height:1.3rem;
+  margin-top:7px;
+  font-size:.92rem;
+  color:var(--muted);
+}
+.feedback.good{color:var(--good);font-weight:850}
+.feedback.bad{color:var(--bad);font-weight:850}
+.option-pair{
+  display:inline-flex;
+  flex-wrap:wrap;
+  gap:7px;
+  margin:3px 2px;
+}
+.option-btn{
+  min-height:40px;
+  border:1px solid #b5c3cc;
+  border-radius:10px;
+  background:#fff;
+  color:var(--ink);
+  padding:7px 11px;
+  cursor:pointer;
+  font-weight:800;
+}
+.option-btn.selected{
+  background:var(--blue);
+  border-color:var(--blue);
+  color:#fff;
+}
+.option-btn.correct{
+  background:var(--good);
+  border-color:var(--good);
+  color:#fff;
+}
+.option-btn.incorrect{
+  background:var(--bad);
+  border-color:var(--bad);
+  color:#fff;
+}
+.actions{
+  display:flex;
+  gap:9px;
+  flex-wrap:wrap;
+  margin-top:17px;
+}
+.btn{
+  min-height:44px;
+  border:0;
+  border-radius:12px;
+  padding:10px 15px;
+  background:var(--blue-dark);
+  color:#fff;
+  font-weight:850;
+  cursor:pointer;
+}
+.btn.secondary{
+  background:#fff;
+  color:var(--ink);
+  border:1px solid var(--line);
+}
+.score{
+  min-height:1.5rem;
+  margin-top:12px;
+  font-weight:900;
+}
+.score.good{color:var(--good)}
+.score.bad{color:var(--bad)}
+.answer-box{
+  display:none;
+  margin-top:14px;
+  padding:14px 16px;
+  border-radius:14px;
+  background:#f6f8fa;
+  border:1px solid var(--line);
+}
+.answer-box.show{display:block}
+.answer-box ol{margin:.3rem 0;padding-left:1.35rem}
+.job-description{
+  padding:15px;
+  border:1px solid var(--line);
+  border-radius:16px;
+  background:#fcfefe;
+  line-height:1.8;
+}
+.word-bank{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin:12px 0 16px;
+}
+.word-chip{
+  padding:7px 10px;
+  border-radius:999px;
+  background:#e8eef2;
+  color:#42515d;
+  font-weight:850;
+}
+.note{
+  margin-top:12px;
+  color:var(--muted);
+  font-size:.9rem;
+}
+footer{
+  padding:18px 0 5px;
+  text-align:center;
+  color:var(--muted);
+  font-size:.86rem;
+}
+@media(max-width:860px){
+  .layout{grid-template-columns:1fr}
+  .theory{position:static}
+}
+@media(max-width:620px){
+  .page{padding:10px}
+  .hero,.panel,.theory{border-radius:18px}
+  .hero,.panel{padding:16px}
+  .theory-body{padding:15px}
+  .item{grid-template-columns:1fr}
+  .num{margin-bottom:2px}
+  .inline-select,.inline-input{width:100%;margin:7px 0}
+  .option-pair{display:flex;width:100%}
+  .option-btn{flex:1 1 45%}
+  .actions .btn{width:100%}
+}
+</style>
+</head>
+<body>
+<main class="page">
+  <section class="hero">
+    <div class="eyebrow">Grammar 3.2</div>
+    <h1>Obligation, permission and possibility</h1>
+    <p class="lead">Practise <strong>must</strong>, <strong>have to</strong>, <strong>need to</strong>, <strong>can</strong> and <strong>could</strong>.</p>
+  </section>
+
+  <div class="layout">
+    <aside class="theory">
+      <div class="theory-title">
+        <h2>Grammar focus</h2>
+      </div>
+      <div class="theory-body">
+        <div class="rule">
+          <strong>Present obligation</strong>
+          Use <b>must</b>, <b>have to</b> and <b>need to</b> when something is necessary.
+          <div class="example">You <b>must</b> work hard to be successful.</div>
+          <div class="example">In my job, I <b>have to</b> manage a team.</div>
+        </div>
+
+        <div class="rule">
+          <strong>No necessity</strong>
+          Use <b>don’t have to</b> or <b>don’t need to</b> when something is not necessary.
+          <div class="example">You <b>don’t have to</b> wear a suit.</div>
+        </div>
+
+        <div class="rule">
+          <strong>Prohibition</strong>
+          Use <b>mustn’t</b> when it is important not to do something.
+          <div class="example">You <b>mustn’t</b> be late for work.</div>
+        </div>
+
+        <div class="rule">
+          <strong>Past obligation</strong>
+          Use <b>had to</b> for obligation in the past.
+          <div class="example">We <b>had to</b> ask permission.</div>
+        </div>
+
+        <div class="rule">
+          <strong>Past: no necessity</strong>
+          Use <b>didn’t have to</b> or <b>didn’t need to</b>.
+          <div class="example">We <b>didn’t have to</b> wear a uniform.</div>
+        </div>
+
+        <div class="rule">
+          <strong>Permission and possibility</strong>
+          Use <b>can</b> and <b>could</b> for permission or possibility. Use <b>can’t</b> and <b>couldn’t</b> when something is not allowed or not possible.
+          <div class="example">Employees <b>can’t</b> make personal calls.</div>
+          <div class="example">At school, we <b>could</b> choose a language.</div>
+        </div>
+      </div>
+    </aside>
+
+    <section>
+      <article class="panel">
+        <h2>Exercise 1</h2>
+        <div class="instruction">Complete the sentences with the words in brackets. Your choices are checked automatically.</div>
+        <div id="exercise1" class="exercise-list"></div>
+        <div class="actions">
+          <button class="btn" type="button" data-check="1">Check all</button>
+          <button class="btn secondary" type="button" data-reset="1">Reset</button>
+        </div>
+        <div id="score1" class="score" aria-live="polite"></div>
+      </article>
+
+      <article class="panel">
+        <h2>Exercise 2</h2>
+        <div class="instruction">Choose the correct option to complete the job description.</div>
+        <div id="exercise2" class="job-description"></div>
+        <div class="actions">
+          <button class="btn" type="button" data-check="2">Check all</button>
+          <button class="btn secondary" type="button" data-reset="2">Reset</button>
+        </div>
+        <div id="score2" class="score" aria-live="polite"></div>
+      </article>
+
+      <article class="panel">
+        <h2>Exercise 3</h2>
+        <div class="instruction">Rewrite the sentences using the verbs in the box. Begin with the words given.</div>
+        <div class="word-bank">
+          <span class="word-chip">could</span>
+          <span class="word-chip">couldn’t</span>
+          <span class="word-chip">don’t have to</span>
+          <span class="word-chip">had to</span>
+          <span class="word-chip">must</span>
+          <span class="word-chip">mustn’t</span>
+        </div>
+        <div id="exercise3" class="exercise-list"></div>
+        <div class="actions">
+          <button class="btn" type="button" data-check="3">Check all</button>
+          <button class="btn secondary" type="button" id="showAnswers3">Show answers</button>
+          <button class="btn secondary" type="button" data-reset="3">Reset</button>
+        </div>
+        <div id="score3" class="score" aria-live="polite"></div>
+        <div id="answers3" class="answer-box">
+          <ol>
+            <li>You have to wear a seatbelt in a car in the UK.</li>
+            <li>You don’t have to book a ticket for the concert.</li>
+            <li>In all jobs, you must be reliable.</li>
+            <li>I missed the bus, so I had to get a taxi.</li>
+            <li>You mustn’t take photos in the museum.</li>
+            <li>Sorry I’m late. I couldn’t leave work early.</li>
+          </ol>
+        </div>
+      </article>
+    </section>
+  </div>
+
+  <footer>Interactive grammar practice</footer>
+</main>
+
+<script>
+const ex1Data = [
+  {
+    parts:["I "," usually choose my own hours at work, but I "," work at least forty hours a week."],
+    options:[["can","have to"],["have to","can"]],
+    answers:["can","have to"]
+  },
+  {
+    parts:["You "," use your mobile. It "," be switched off."],
+    options:[["must","can't"],["must","can't"]],
+    answers:["can't","must"]
+  },
+  {
+    parts:["You "," pay in pounds. You "," also pay in euros or dollars if you prefer."],
+    options:[["can","don't have to"],["can","don't have to"]],
+    answers:["don't have to","can"]
+  },
+  {
+    parts:["The main requirements in my job are that you "," be good at making decisions and you "," be a good leader."],
+    options:[["must","have to"],["must","have to"]],
+    accepted:[
+      ["must","have to"],
+      ["have to","must"]
+    ]
+  },
+  {
+    parts:["Sorry I’m late home. I "," stay at work and finish a report. I "," leave until I’d sent it to my boss."],
+    options:[["couldn't","had to"],["couldn't","had to"]],
+    answers:["had to","couldn't"]
+  },
+  {
+    parts:["You "," have a university degree to work here, but you "," have a lot of relevant experience."],
+    options:[["don't need to","must"],["don't need to","must"]],
+    answers:["don't need to","must"]
+  },
+  {
+    parts:["We "," study at least one foreign language at school, but we "," study English. We "," choose from English, Russian, German and Chinese."],
+    options:[["could","didn't have to","had to"],["could","didn't have to","had to"],["could","didn't have to","had to"]],
+    answers:["had to","didn't have to","could"]
+  }
+];
+
+const ex2Data = [
+  {options:["mustn't","don't have to"], answer:"don't have to"},
+  {options:["can","must"], answer:"must"},
+  {options:["must","can"], answer:"must"},
+  {options:["can","have to"], answer:"have to"},
+  {options:["must","can"], answer:"must"},
+  {options:["must","had to"], answer:"had to"}
+];
+
+const ex3Data = [
+  {
+    prompt:"It’s the law to wear a seatbelt in a car in the UK.",
+    start:"You",
+    accepted:[
+      "you have to wear a seatbelt in a car in the uk",
+      "you must wear a seatbelt in a car in the uk"
+    ]
+  },
+  {
+    prompt:"It’s not necessary to book a ticket for the concert.",
+    start:"You",
+    accepted:[
+      "you don't have to book a ticket for the concert",
+      "you do not have to book a ticket for the concert"
+    ]
+  },
+  {
+    prompt:"In all jobs, being reliable is extremely important.",
+    start:"In all jobs, you",
+    accepted:[
+      "in all jobs you must be reliable",
+      "in all jobs you have to be reliable"
+    ]
+  },
+  {
+    prompt:"I missed the bus, so my only option was to get a taxi.",
+    start:"I missed the bus, so",
+    accepted:[
+      "i missed the bus so i had to get a taxi"
+    ]
+  },
+  {
+    prompt:"It’s not OK to take photos in the museum.",
+    start:"You",
+    accepted:[
+      "you mustn't take photos in the museum",
+      "you must not take photos in the museum"
+    ]
+  },
+  {
+    prompt:"Sorry I’m late. I wasn’t allowed to leave work early.",
+    start:"Sorry I’m late. I",
+    accepted:[
+      "sorry i'm late i couldn't leave work early",
+      "sorry i am late i couldn't leave work early",
+      "sorry i'm late i could not leave work early",
+      "sorry i am late i could not leave work early"
+    ]
+  }
+];
+
+function makeSelect(options, ex, item, blank){
+  const select=document.createElement('select');
+  select.className='inline-select';
+  select.dataset.ex=ex;
+  select.dataset.item=item;
+  select.dataset.blank=blank;
+  const p=document.createElement('option');
+  p.value='';
+  p.textContent='Choose...';
+  select.appendChild(p);
+  options.forEach(value=>{
+    const o=document.createElement('option');
+    o.value=value;
+    o.textContent=value;
+    select.appendChild(o);
+  });
+  select.addEventListener('change',()=>{
+    checkExercise1Item(item);
+    updateScore1();
+    saveProgress();
+  });
+  return select;
+}
+
+function renderExercise1(){
+  const host=document.getElementById('exercise1');
+  host.innerHTML='';
+  ex1Data.forEach((item,index)=>{
+    const row=document.createElement('div');
+    row.className='item';
+    row.dataset.item=index;
+    const n=document.createElement('span');
+    n.className='num';
+    n.textContent=index+1;
+    const body=document.createElement('div');
+    body.className='sentence';
+    item.parts.forEach((part,i)=>{
+      body.appendChild(document.createTextNode(part));
+      if(i<item.parts.length-1){
+        body.appendChild(makeSelect(item.options[i],1,index,i));
+      }
+    });
+    const feedback=document.createElement('div');
+    feedback.className='feedback';
+    body.appendChild(feedback);
+    row.append(n,body);
+    host.appendChild(row);
+  });
+}
+
+function getEx1Values(index){
+  return [...document.querySelectorAll(`#exercise1 .item[data-item="${index}"] select`)].map(x=>x.value);
+}
+function isEx1Correct(index){
+  const item=ex1Data[index];
+  const values=getEx1Values(index);
+  if(values.some(v=>!v)) return null;
+  if(item.accepted){
+    return item.accepted.some(set=>set.every((v,i)=>v===values[i]));
+  }
+  return item.answers.every((v,i)=>v===values[i]);
+}
+function checkExercise1Item(index){
+  const row=document.querySelector(`#exercise1 .item[data-item="${index}"]`);
+  const feedback=row.querySelector('.feedback');
+  const result=isEx1Correct(index);
+  row.classList.remove('good','bad');
+  feedback.className='feedback';
+  if(result===null){
+    feedback.textContent='';
+  }else if(result){
+    row.classList.add('good');
+    feedback.textContent='Correct.';
+    feedback.classList.add('good');
+  }else{
+    row.classList.add('bad');
+    feedback.textContent='Try again.';
+    feedback.classList.add('bad');
+  }
+}
+function updateScore1(){
+  let complete=0, correct=0;
+  ex1Data.forEach((_,i)=>{
+    const r=isEx1Correct(i);
+    if(r!==null) complete++;
+    if(r===true) correct++;
+  });
+  const box=document.getElementById('score1');
+  box.textContent=complete ? `${correct} / ${ex1Data.length} correct` : '';
+  box.className='score '+(correct===ex1Data.length?'good':'bad');
+}
+
+function makeOptionPair(options,index){
+  const wrap=document.createElement('span');
+  wrap.className='option-pair';
+  wrap.dataset.index=index;
+  options.forEach(value=>{
+    const b=document.createElement('button');
+    b.type='button';
+    b.className='option-btn';
+    b.textContent=value;
+    b.dataset.value=value;
+    b.addEventListener('click',()=>{
+      wrap.querySelectorAll('.option-btn').forEach(x=>x.classList.remove('selected','correct','incorrect'));
+      b.classList.add('selected');
+      wrap.dataset.selected=value;
+      checkEx2Item(index);
+      updateScore2();
+      saveProgress();
+    });
+    wrap.appendChild(b);
+  });
+  return wrap;
+}
+
+function renderExercise2(){
+  const host=document.getElementById('exercise2');
+  host.innerHTML='';
+  const pieces=[
+    'A PA (personal assistant) gives support to managers or directors. To be a PA, you ',
+    ' have any specific qualifications, but you ',
+    ' have the right skills and personal qualities. PAs ',
+    ' have good knowledge of the organization in which they work, and they ',
+    ' know who the important people in the company are. Managers often communicate with customers and colleagues through their PA, so they ',
+    ' be good communicators. In the past, PAs ',
+    ' have good typing skills, but today this isn’t as important.'
+  ];
+  pieces.forEach((piece,i)=>{
+    host.appendChild(document.createTextNode(piece));
+    if(i<ex2Data.length){
+      host.appendChild(makeOptionPair(ex2Data[i].options,i));
+    }
+  });
+}
+
+function getEx2Value(index){
+  const wrap=document.querySelector(`#exercise2 .option-pair[data-index="${index}"]`);
+  return wrap.dataset.selected || '';
+}
+function checkEx2Item(index){
+  const wrap=document.querySelector(`#exercise2 .option-pair[data-index="${index}"]`);
+  const selected=getEx2Value(index);
+  wrap.querySelectorAll('.option-btn').forEach(x=>x.classList.remove('correct','incorrect'));
+  if(!selected) return;
+  const chosen=wrap.querySelector(`[data-value="${CSS.escape(selected)}"]`);
+  chosen.classList.add(selected===ex2Data[index].answer?'correct':'incorrect');
+}
+function updateScore2(){
+  let complete=0,correct=0;
+  ex2Data.forEach((item,i)=>{
+    const value=getEx2Value(i);
+    if(value) complete++;
+    if(value===item.answer) correct++;
+  });
+  const box=document.getElementById('score2');
+  box.textContent=complete ? `${correct} / ${ex2Data.length} correct` : '';
+  box.className='score '+(correct===ex2Data.length?'good':'bad');
+}
+
+function normalize(text){
+  return text.toLowerCase()
+    .replace(/[’‘]/g,"'")
+    .replace(/[.,!?;:]/g,'')
+    .replace(/\s+/g,' ')
+    .trim();
+}
+function renderExercise3(){
+  const host=document.getElementById('exercise3');
+  host.innerHTML='';
+  ex3Data.forEach((item,index)=>{
+    const row=document.createElement('div');
+    row.className='item';
+    row.dataset.item=index;
+    const n=document.createElement('span');
+    n.className='num';
+    n.textContent=index+1;
+    const body=document.createElement('div');
+    body.className='sentence';
+    const prompt=document.createElement('div');
+    prompt.textContent=item.prompt;
+    const start=document.createElement('div');
+    start.style.marginTop='7px';
+    start.style.fontWeight='800';
+    start.textContent=item.start;
+    const input=document.createElement('input');
+    input.type='text';
+    input.className='inline-input';
+    input.placeholder='Complete the sentence...';
+    input.autocomplete='off';
+    input.dataset.item=index;
+    let timer;
+    input.addEventListener('input',()=>{
+      clearTimeout(timer);
+      timer=setTimeout(()=>{
+        checkEx3Item(index);
+        updateScore3();
+        saveProgress();
+      },350);
+    });
+    input.addEventListener('blur',()=>{
+      checkEx3Item(index);
+      updateScore3();
+      saveProgress();
+    });
+    const feedback=document.createElement('div');
+    feedback.className='feedback';
+    body.append(prompt,start,input,feedback);
+    row.append(n,body);
+    host.appendChild(row);
+  });
+}
+function fullEx3Answer(index){
+  const row=document.querySelector(`#exercise3 .item[data-item="${index}"]`);
+  const input=row.querySelector('input').value.trim();
+  return normalize(ex3Data[index].start+' '+input);
+}
+function checkEx3Item(index){
+  const row=document.querySelector(`#exercise3 .item[data-item="${index}"]`);
+  const input=row.querySelector('input');
+  const feedback=row.querySelector('.feedback');
+  row.classList.remove('good','bad');
+  feedback.className='feedback';
+  if(!input.value.trim()){
+    feedback.textContent='';
+    return null;
+  }
+  const value=fullEx3Answer(index);
+  const correct=ex3Data[index].accepted.map(normalize).includes(value);
+  row.classList.add(correct?'good':'bad');
+  feedback.textContent=correct?'Correct.':'Check the grammar and wording.';
+  feedback.classList.add(correct?'good':'bad');
+  return correct;
+}
+function updateScore3(){
+  let complete=0,correct=0;
+  ex3Data.forEach((_,i)=>{
+    const row=document.querySelector(`#exercise3 .item[data-item="${i}"]`);
+    const filled=Boolean(row.querySelector('input').value.trim());
+    if(filled){
+      complete++;
+      if(checkEx3Item(i)) correct++;
+    }
+  });
+  const box=document.getElementById('score3');
+  box.textContent=complete ? `${correct} / ${ex3Data.length} correct` : '';
+  box.className='score '+(correct===ex3Data.length?'good':'bad');
+}
+
+function checkAll(ex){
+  if(ex===1){
+    ex1Data.forEach((_,i)=>checkExercise1Item(i));
+    updateScore1();
+  }
+  if(ex===2){
+    ex2Data.forEach((_,i)=>checkEx2Item(i));
+    updateScore2();
+  }
+  if(ex===3){
+    ex3Data.forEach((_,i)=>checkEx3Item(i));
+    updateScore3();
+  }
+}
+function resetExercise(ex){
+  if(ex===1){
+    document.querySelectorAll('#exercise1 select').forEach(x=>x.value='');
+    document.querySelectorAll('#exercise1 .item').forEach(x=>x.classList.remove('good','bad'));
+    document.querySelectorAll('#exercise1 .feedback').forEach(x=>{x.textContent='';x.className='feedback';});
+    document.getElementById('score1').textContent='';
+  }
+  if(ex===2){
+    document.querySelectorAll('#exercise2 .option-pair').forEach(w=>delete w.dataset.selected);
+    document.querySelectorAll('#exercise2 .option-btn').forEach(x=>x.classList.remove('selected','correct','incorrect'));
+    document.getElementById('score2').textContent='';
+  }
+  if(ex===3){
+    document.querySelectorAll('#exercise3 input').forEach(x=>x.value='');
+    document.querySelectorAll('#exercise3 .item').forEach(x=>x.classList.remove('good','bad'));
+    document.querySelectorAll('#exercise3 .feedback').forEach(x=>{x.textContent='';x.className='feedback';});
+    document.getElementById('score3').textContent='';
+  }
+  saveProgress();
+}
+
+document.querySelectorAll('[data-check]').forEach(btn=>{
+  btn.addEventListener('click',()=>checkAll(Number(btn.dataset.check)));
+});
+document.querySelectorAll('[data-reset]').forEach(btn=>{
+  btn.addEventListener('click',()=>resetExercise(Number(btn.dataset.reset)));
+});
+
+document.getElementById('showAnswers3').addEventListener('click',()=>{
+  const box=document.getElementById('answers3');
+  const visible=box.classList.toggle('show');
+  document.getElementById('showAnswers3').textContent=visible?'Hide answers':'Show answers';
+});
+
+const storageKey='obligation_permission_possibility_progress_v1';
+function saveProgress(){
+  const data={
+    ex1:[...document.querySelectorAll('#exercise1 select')].map(x=>x.value),
+    ex2:[...document.querySelectorAll('#exercise2 .option-pair')].map(x=>x.dataset.selected||''),
+    ex3:[...document.querySelectorAll('#exercise3 input')].map(x=>x.value)
+  };
+  localStorage.setItem(storageKey,JSON.stringify(data));
+}
+function loadProgress(){
+  try{
+    const data=JSON.parse(localStorage.getItem(storageKey)||'null');
+    if(!data) return;
+    [...document.querySelectorAll('#exercise1 select')].forEach((x,i)=>x.value=data.ex1?.[i]||'');
+    [...document.querySelectorAll('#exercise2 .option-pair')].forEach((wrap,i)=>{
+      const value=data.ex2?.[i]||'';
+      if(value){
+        wrap.dataset.selected=value;
+        const b=wrap.querySelector(`[data-value="${CSS.escape(value)}"]`);
+        if(b) b.classList.add('selected');
+      }
+    });
+    [...document.querySelectorAll('#exercise3 input')].forEach((x,i)=>x.value=data.ex3?.[i]||'');
+    checkAll(1);checkAll(2);checkAll(3);
+  }catch(e){}
+}
+
+renderExercise1();
+renderExercise2();
+renderExercise3();
+loadProgress();
+</script>
+</body>
+</html>
