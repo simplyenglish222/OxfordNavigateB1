@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1,viewport-fit=cover" name="viewport"/>
+<title>Faking It — Article, Obligation Practice and Flashcards</title>
+<style>
+:root{
+  --ink:#23313d;
+  --muted:#687684;
+  --paper:#fffdf8;
+  --bg:#f1eee7;
+  --line:#ddd7ca;
+  --orange:#d9532b;
+  --orange-soft:#fff0e9;
+  --teal:#147b8b;
+  --teal-soft:#eaf7f9;
+  --purple:#7154b3;
+  --purple-soft:#f1edff;
+  --green:#18794e;
+  --green-soft:#edf9f2;
+  --red:#b42318;
+  --red-soft:#fff2f0;
+  --shadow:0 14px 36px rgba(34,45,55,.12);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  color:var(--ink);
+  background:
+    radial-gradient(circle at 12% 0%,rgba(217,83,43,.11),transparent 28rem),
+    linear-gradient(180deg,#f8f6f1 0%,var(--bg) 100%);
+  font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  line-height:1.62;
+}
+button,select,textarea{font:inherit}
+button,select{touch-action:manipulation}
+.page{width:min(980px,100%);margin:0 auto;padding:18px}
+.masthead{
+  background:#efede4;
+  border:1px solid var(--line);
+  border-radius:24px 24px 0 0;
+  padding:16px 22px 22px;
+  box-shadow:var(--shadow);
+}
+.date{
+  padding-bottom:10px;
+  border-bottom:2px solid #d3cec3;
+  font-family:Georgia,serif;
+  font-size:.95rem;
+}
+.review{
+  margin:.3rem 0 0;
+  color:#d84924;
+  font:900 clamp(3.5rem,12vw,7rem)/.95 Georgia,serif;
+}
+.subtitle{
+  margin:.35rem 0 0;
+  padding-top:12px;
+  border-top:2px solid #d3cec3;
+  color:#4b5057;
+  font:900 clamp(1.9rem,5vw,3.1rem)/1.1 Georgia,serif;
+}
+.section{
+  background:rgba(255,253,248,.98);
+  border:1px solid var(--line);
+  padding:22px;
+  box-shadow:var(--shadow);
+}
+.article-section{border-top:0;border-radius:0 0 24px 24px}
+.practice-section{margin-top:22px;border-radius:24px}
+h2{
+  margin:0 0 .6rem;
+  font-size:clamp(1.65rem,4vw,2.3rem);
+  line-height:1.16;
+}
+h3{margin:.2rem 0 .45rem}
+.intro{margin:.2rem 0 1rem;color:var(--muted)}
+.legend{display:flex;flex-wrap:wrap;gap:9px;margin:14px 0 20px}
+.legend-item{
+  display:flex;align-items:center;gap:8px;
+  border:1px solid var(--line);background:#fff;
+  padding:8px 11px;border-radius:999px;font-size:.91rem;font-weight:800;
+}
+.dot{width:13px;height:13px;border-radius:50%}
+.dot.topic{background:var(--orange)}
+.dot.skill{background:var(--teal)}
+.dot.grammar{background:var(--purple)}
+.article{
+  font-family:Georgia,"Times New Roman",serif;
+  font-size:clamp(1.05rem,2.2vw,1.22rem);
+}
+.article p{margin:0 0 1rem}
+.term{
+  border:0;
+  padding:0 .12em;
+  border-radius:.24em;
+  cursor:pointer;
+  font:700 inherit;
+  color:inherit;
+}
+.term.topic{background:linear-gradient(transparent 60%,rgba(217,83,43,.27) 60%)}
+.term.skill{background:linear-gradient(transparent 60%,rgba(20,123,139,.25) 60%)}
+.term.grammar{background:linear-gradient(transparent 60%,rgba(113,84,179,.25) 60%)}
+.term:focus-visible,button:focus-visible,select:focus-visible,textarea:focus-visible{
+  outline:4px solid rgba(20,123,139,.22);
+  outline-offset:2px;
+}
+.translation-box{
+  position:sticky;
+  bottom:8px;
+  z-index:4;
+  margin:20px 0 5px;
+  min-height:74px;
+  padding:14px 16px;
+  background:rgba(255,255,255,.98);
+  border:1px solid var(--line);
+  border-radius:16px;
+  box-shadow:0 10px 25px rgba(34,45,55,.16);
+}
+.translation-box strong{display:block;margin-bottom:2px}
+.translation-box .empty{color:var(--muted)}
+.category-label{
+  display:inline-block;
+  margin-right:7px;
+  padding:2px 8px;
+  border-radius:999px;
+  color:#fff;
+  font-size:.76rem;
+  font-weight:900;
+  text-transform:uppercase;
+  letter-spacing:.04em;
+}
+.category-label.topic{background:var(--orange)}
+.category-label.skill{background:var(--teal)}
+.category-label.grammar{background:var(--purple)}
+.questions{
+  margin-top:28px;
+  padding-top:22px;
+  border-top:2px solid var(--line);
+}
+.question-card{
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:16px;
+  margin:13px 0;
+}
+.question-row{display:flex;gap:11px;align-items:flex-start}
+.number{
+  display:grid;place-items:center;
+  min-width:34px;height:34px;border-radius:50%;
+  background:var(--orange);color:#fff;font-weight:900;
+}
+.question-text{font-size:1.05rem;font-weight:850}
+textarea{
+  width:100%;
+  min-height:105px;
+  resize:vertical;
+  margin:13px 0 10px;
+  padding:12px 13px;
+  border:1px solid #b8c3cc;
+  border-radius:12px;
+  background:#fdfdfc;
+  color:var(--ink);
+}
+.actions{display:flex;gap:9px;flex-wrap:wrap}
+.btn{
+  min-height:44px;
+  border:0;
+  border-radius:12px;
+  padding:10px 15px;
+  background:var(--teal);
+  color:#fff;
+  font-weight:850;
+  cursor:pointer;
+}
+.btn.secondary{
+  background:#fff;
+  color:var(--ink);
+  border:1px solid var(--line);
+}
+.sample{
+  display:none;
+  margin-top:12px;
+  padding:13px 14px;
+  border-left:5px solid var(--green);
+  border-radius:0 12px 12px 0;
+  background:var(--green-soft);
+}
+.sample.show{display:block}
+.note{
+  margin:17px 0 20px;
+  border:1px solid #d9ccf8;
+  background:var(--purple-soft);
+  border-radius:18px;
+  overflow:hidden;
+}
+.note-title{
+  padding:12px 15px;
+  background:#e6dcff;
+  font-weight:900;
+  color:#4c358b;
+}
+.note-grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:12px;
+  padding:15px;
+}
+.note-card{
+  background:#fff;
+  border:1px solid #ddd2fa;
+  border-radius:14px;
+  padding:13px;
+}
+.note-card strong{display:block;margin-bottom:5px}
+.note-card code{
+  display:inline-block;
+  padding:2px 6px;
+  margin:2px 1px;
+  border-radius:7px;
+  background:#f6f2ff;
+  color:#4b3489;
+  font:800 .94rem/1.4 ui-monospace,SFMono-Regular,Consolas,monospace;
+}
+.exercise-list{display:grid;gap:12px}
+.exercise-item{
+  display:grid;
+  grid-template-columns:auto 1fr;
+  gap:12px;
+  align-items:start;
+  padding:15px;
+  border:1px solid var(--line);
+  border-radius:16px;
+  background:#fff;
+}
+.exercise-main{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.exercise-item.good{
+  border-color:#76b89a;
+  background:var(--green-soft);
+}
+.exercise-item.bad{
+  border-color:#e5a39c;
+  background:var(--red-soft);
+}
+.choice{
+  min-width:165px;
+  min-height:44px;
+  padding:8px 10px;
+  border:1px solid #aebbc5;
+  border-radius:11px;
+  background:#fff;
+  color:var(--ink);
+  font-weight:800;
+}
+.feedback{
+  grid-column:2;
+  min-height:1.3rem;
+  color:var(--muted);
+  font-size:.92rem;
+}
+.feedback.correct{color:var(--green);font-weight:850}
+.feedback.incorrect{color:var(--red);font-weight:850}
+.score{
+  min-height:1.5rem;
+  margin-top:12px;
+  font-weight:900;
+}
+.score.good{color:var(--green)}
+.score.bad{color:var(--red)}
+.answer-key{
+  display:none;
+  margin-top:15px;
+  padding:14px 16px;
+  border-radius:14px;
+  background:#f6f8fa;
+  border:1px solid var(--line);
+}
+.answer-key.show{display:block}
+.answer-key ol{margin:.35rem 0 .15rem;padding-left:1.35rem}
+footer{
+  padding:18px 0 5px;
+  text-align:center;
+  color:var(--muted);
+  font-size:.86rem;
+}
+@media(max-width:700px){
+  .page{padding:10px}
+  .masthead{padding:14px 15px 17px;border-radius:18px 18px 0 0}
+  .section{padding:16px}
+  .article-section{border-radius:0 0 18px 18px}
+  .practice-section{border-radius:18px}
+  .legend-item{width:100%;border-radius:13px}
+  .note-grid{grid-template-columns:1fr}
+  .exercise-main{display:block}
+  .choice{display:block;width:100%;margin:8px 0}
+  .actions .btn{width:100%}
+  .feedback{grid-column:1 / -1}
+}
+
+
+.oral-note{
+  margin:10px 0 16px;
+  padding:12px 14px;
+  border-left:5px solid var(--teal);
+  border-radius:0 13px 13px 0;
+  background:var(--teal-soft);
+  color:#155d68;
+  font-weight:850;
+}
+.flashcard-section{
+  margin-top:22px;
+  border-radius:24px;
+}
+.flashcard-heading{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:18px;
+  flex-wrap:wrap;
+}
+.important-label{
+  display:inline-block;
+  margin-bottom:7px;
+  padding:4px 10px;
+  border-radius:999px;
+  background:var(--orange);
+  color:#fff;
+  font-size:.78rem;
+  font-weight:950;
+  letter-spacing:.08em;
+}
+.direction-switch{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+}
+.direction-btn{
+  min-height:44px;
+  padding:9px 13px;
+  border:1px solid var(--line);
+  border-radius:12px;
+  background:#fff;
+  color:var(--ink);
+  cursor:pointer;
+  font-weight:850;
+}
+.direction-btn.active{
+  border-color:var(--teal);
+  background:var(--teal);
+  color:#fff;
+}
+.flashcard-tools{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  flex-wrap:wrap;
+  margin:17px 0 20px;
+}
+.flashcard-progress{
+  margin-left:auto;
+  color:var(--muted);
+  font-weight:800;
+}
+.flashcard-group{
+  margin-top:22px;
+}
+.flashcard-group h3{
+  margin:0 0 12px;
+  padding-bottom:8px;
+  border-bottom:2px solid var(--line);
+  font-size:1.35rem;
+}
+.flashcard-grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:12px;
+}
+.flashcard{
+  position:relative;
+  min-height:150px;
+  padding:0;
+  border:1px solid var(--line);
+  border-radius:18px;
+  background:#fff;
+  cursor:pointer;
+  text-align:left;
+  overflow:hidden;
+  box-shadow:0 5px 15px rgba(34,45,55,.06);
+}
+.flashcard::after{
+  content:"Tap to reveal";
+  position:absolute;
+  right:11px;
+  bottom:8px;
+  color:var(--muted);
+  font-size:.75rem;
+  font-weight:800;
+}
+.flashcard.revealed::after{
+  content:"Tap to hide";
+}
+.flashcard-inner{
+  min-height:150px;
+  padding:16px 16px 30px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  gap:10px;
+}
+.flashcard-front{
+  font-weight:900;
+  font-size:1.04rem;
+  line-height:1.4;
+}
+.flashcard-back{
+  display:none;
+  padding-top:10px;
+  border-top:1px solid var(--line);
+  color:#155d68;
+  font-weight:800;
+  line-height:1.48;
+}
+.flashcard.revealed{
+  border-color:#8cc9d1;
+  background:linear-gradient(145deg,#ffffff,#effafb);
+}
+.flashcard.revealed .flashcard-back{
+  display:block;
+}
+.flashcard-number{
+  position:absolute;
+  top:9px;
+  right:10px;
+  display:grid;
+  place-items:center;
+  min-width:28px;
+  height:28px;
+  padding:0 7px;
+  border-radius:999px;
+  background:#eef2f5;
+  color:#66737f;
+  font-size:.75rem;
+  font-weight:900;
+}
+@media(max-width:700px){
+  .flashcard-section{border-radius:18px}
+  .direction-switch,
+  .direction-btn,
+  .flashcard-tools .btn{
+    width:100%;
+  }
+  .flashcard-progress{
+    width:100%;
+    margin-left:0;
+  }
+  .flashcard-grid{
+    grid-template-columns:1fr;
+  }
+  .flashcard{
+    min-height:135px;
+  }
+  .flashcard-inner{
+    min-height:135px;
+  }
+}
+</style>
+</head>
+<body>
+<main class="page">
+<header class="masthead">
+<div class="date">Sunday, 20 April</div>
+<div class="review">Review</div>
+<h1 class="subtitle">Last night’s TV</h1>
+</header>
+<section class="section article-section">
+<p class="intro">Tap a highlighted expression to see its Russian translation.</p>
+<div class="legend">
+<span class="legend-item"><span class="dot topic"></span>Topic vocabulary</span>
+<span class="legend-item"><span class="dot skill"></span>Skills and qualities</span>
+<span class="legend-item"><span class="dot grammar"></span>Obligation and necessity</span>
+</div>
+<article class="article">
+<p>
+        The best thing on TV last night was <em>Faking It</em>. It takes someone with
+        <button class="term topic" data-category="topic" data-translation="без опыта в определённой профессии">no experience in a particular job</button>
+        and sends them to
+        <button class="term topic" data-category="topic" data-translation="жить и обучаться у специалиста">live and train with an expert</button>
+        for four weeks. They then
+        <button class="term grammar" data-category="grammar" data-translation="им приходится / они должны принять участие">have to take part</button>
+        in a
+        <button class="term topic" data-category="topic" data-translation="соревнование с профессионалами">contest against professionals</button>,
+        and a
+        <button class="term topic" data-category="topic" data-translation="жюри из экспертов">panel of expert judges</button>
+        decides which participant is the ‘faker’. At the beginning of the programme, we met Ed working in a fast food van in all weathers, selling chips and burgers. In this job he
+        <button class="term grammar" data-category="grammar" data-translation="ему не нужно было много делать">didn’t need to do much</button>
+        apart from arrive at work on time and be reasonably pleasant to people. All this changed as he
+        <button class="term grammar" data-category="grammar" data-translation="ему пришлось научиться">had to learn</button>
+        how not to be pleasant to people as a
+        <button class="term topic" data-category="topic" data-translation="шеф-повар">head chef</button>
+        in a top London restaurant.
+      </p>
+<p>
+        According to Ed’s teacher, one of London’s top chefs, to
+        <button class="term skill" data-category="skill" data-translation="добиться успеха в профессии повара">succeed as a chef</button>
+        you
+        <button class="term grammar" data-category="grammar" data-translation="необходимо / нужно иметь">must have</button>
+        a
+        <button class="term skill" data-category="skill" data-translation="увлечение едой; страсть к кулинарии">passion for food</button>,
+        the
+        <button class="term skill" data-category="skill" data-translation="умение руководить командой">ability to run a team</button>,
+        <button class="term skill" data-category="skill" data-translation="уверенность в себе">confidence</button>,
+        <button class="term skill" data-category="skill" data-translation="работать в строго установленное время">work to very precise times</button>,
+        and
+        <button class="term skill" data-category="skill" data-translation="уметь готовить">be able to cook</button>.
+      </p>
+<p>
+        So, could Ed cook? He explained his technique was to ‘wait until the burger went brown on both sides’; he
+        <button class="term grammar" data-category="grammar" data-translation="ему не нужно было делать намного больше">didn’t have to do much more</button>.
+        To
+        <button class="term skill" data-category="skill" data-translation="проверить его навыки">test his skills</button>,
+        his teacher asked him to cook the food in his fridge, telling Ed he could prepare it any way he wanted. The results were not good. Even the vegetables were
+        <button class="term topic" data-category="topic" data-translation="переварены / передержаны при готовке">overcooked</button>,
+        as Ed didn’t realise that he
+        <button class="term grammar" data-category="grammar" data-translation="ему не нужно было варить морковь так долго">didn’t need to boil carrots</button>
+        for an hour or more.
+      </p>
+<p>
+        But Ed’s biggest problem was that he hated
+        <button class="term skill" data-category="skill" data-translation="говорить людям, что им делать; отдавать указания">telling people what to do</button>.
+        As the top chef explained to Ed, he
+        <button class="term grammar" data-category="grammar" data-translation="он не мог быть шеф-поваром и оставаться мягким">couldn’t be a head chef and be nice</button>.
+        Ed was shocked to realise that he
+        <button class="term grammar" data-category="grammar" data-translation="он не мог всё время говорить «пожалуйста» и «спасибо»">couldn’t say please and thank you all the time</button>
+        if he wanted the team to
+        <button class="term skill" data-category="skill" data-translation="уважать его">respect him</button>.
+        He also
+        <button class="term grammar" data-category="grammar" data-translation="ему также пришлось научиться">had to learn</button>
+        how to
+        <button class="term skill" data-category="skill" data-translation="ходить и стоять более уверенно">walk and stand more confidently</button>.
+      </p>
+<p>
+        Amazingly, after four weeks of
+        <button class="term topic" data-category="topic" data-translation="тяжёлая работа">hard work</button>
+        and quite a few problems, none of the judges realised that Ed was a
+        <button class="term topic" data-category="topic" data-translation="полный новичок">complete beginner</button>.
+        In fact, one
+        <button class="term topic" data-category="topic" data-translation="предложил ему работу поваром">offered him a job as a chef</button>.
+      </p>
+</article>
+<aside aria-live="polite" class="translation-box" id="translationBox">
+<span class="empty">Tap a highlighted expression to see the translation.</span>
+</aside>
+<section class="questions">
+<h2>Questions</h2><div class="oral-note">You may answer both questions orally. Writing is optional.</div>
+<article class="question-card">
+<div class="question-row">
+<span class="number">1</span>
+<div class="question-text">Did the participant succeed in his challenge?</div>
+</div>
+<textarea placeholder="Write or say your answer..."></textarea>
+<div class="actions">
+<button class="btn show-answer" type="button">Show sample answer</button>
+<button class="btn secondary clear-answer" type="button">Clear</button>
+</div>
+<div class="sample">
+<strong>Sample answer</strong>
+          Yes, he did. None of the judges realised that he was a complete beginner, and one of them even offered him a job as a chef.
+        </div>
+</article>
+<article class="question-card">
+<div class="question-row">
+<span class="number">2</span>
+<div class="question-text">What difficulties did he face?</div>
+</div>
+<textarea placeholder="Write or say your answer..."></textarea>
+<div class="actions">
+<button class="btn show-answer" type="button">Show sample answer</button>
+<button class="btn secondary clear-answer" type="button">Clear</button>
+</div>
+<div class="sample">
+<strong>Sample answer</strong>
+          He could not cook very well, he overcooked the vegetables, and he found it difficult to give people orders. He also had to learn to act and speak more confidently as a head chef.
+        </div>
+</article>
+</section>
+</section>
+<section class="section practice-section">
+<h2>Obligation and necessity</h2>
+<p class="intro">Choose the best expression in each sentence.</p>
+<aside class="note">
+<div class="note-title">Grammar note</div>
+<div class="note-grid">
+<div class="note-card">
+<strong>Present obligation</strong>
+<code>have to</code> <code>need to</code> <code>must</code><br/>
+          = it is necessary to do something
+        </div>
+<div class="note-card">
+<strong>No necessity</strong>
+<code>don’t have to</code> <code>don’t need to</code><br/>
+          = it is not necessary
+        </div>
+<div class="note-card">
+<strong>Prohibition</strong>
+<code>can’t</code> <code>mustn’t</code><br/>
+          = it is not allowed / it is important not to do it
+        </div>
+<div class="note-card">
+<strong>Past obligation</strong>
+<code>had to</code> <code>needed to</code><br/>
+          We usually use these forms instead of <code>must</code> in the past.
+        </div>
+</div>
+</aside>
+<div class="exercise-list" id="exerciseList"></div>
+<div class="actions" style="margin-top:18px">
+<button class="btn" id="checkExercise" type="button">Check answers</button>
+<button class="btn secondary" id="showAnswers" type="button">Show answers</button>
+<button class="btn secondary" id="resetExercise" type="button">Reset</button>
+</div>
+<div aria-live="polite" class="score" id="exerciseScore"></div>
+<div class="answer-key" id="answerKey">
+<strong>Answers</strong>
+<ol>
+<li>have to</li>
+<li>don’t have to</li>
+<li>can’t</li>
+<li>don’t need to</li>
+<li>mustn’t</li>
+<li>must</li>
+<li>need to</li>
+<li>must</li>
+</ol>
+</div>
+</section>
+
+<section class="section flashcard-section" id="importantFlashcards">
+<div class="flashcard-heading">
+<div>
+<span class="important-label">IMPORTANT</span>
+<h2>Words and sentences to remember</h2>
+<p class="intro">Tap a card to reveal the other language.</p>
+</div>
+<div aria-label="Flashcard direction" class="direction-switch" role="group">
+<button class="direction-btn active" data-direction="en-ru" type="button">English → Russian</button>
+<button class="direction-btn" data-direction="ru-en" type="button">Russian → English</button>
+</div>
+</div>
+<div class="flashcard-tools">
+<button class="btn" id="revealAllCards" type="button">Reveal all</button>
+<button class="btn secondary" id="resetCards" type="button">Hide all</button>
+<span class="flashcard-progress" id="flashcardProgress">0 revealed</span>
+</div>
+<section class="flashcard-group">
+<h3>Skills</h3>
+<div class="flashcard-grid" id="skillsFlashcards"></div>
+</section>
+<section class="flashcard-group">
+<h3>Time management and organisation</h3>
+<div class="flashcard-grid" id="sentenceFlashcards"></div>
+</section>
+</section>
+<footer>Interactive reading and grammar practice</footer>
+</main>
+<script>
+const translationBox = document.getElementById('translationBox');
+const categoryNames = {
+  topic: 'Topic vocabulary',
+  skill: 'Skills',
+  grammar: 'Obligation'
+};
+
+document.querySelectorAll('.term').forEach(term => {
+  term.addEventListener('click', () => {
+    const category = term.dataset.category;
+    translationBox.innerHTML = `
+      <span class="category-label ${category}">${categoryNames[category]}</span>
+      <strong>${term.textContent.trim()}</strong>
+      <span>${term.dataset.translation}</span>
+    `;
+  });
+});
+
+document.querySelectorAll('.question-card').forEach(card => {
+  const showButton = card.querySelector('.show-answer');
+  const clearButton = card.querySelector('.clear-answer');
+  const sample = card.querySelector('.sample');
+  const textarea = card.querySelector('textarea');
+
+  showButton.addEventListener('click', () => {
+    const visible = sample.classList.toggle('show');
+    showButton.textContent = visible ? 'Hide sample answer' : 'Show sample answer';
+  });
+
+  clearButton.addEventListener('click', () => {
+    textarea.value = '';
+    textarea.focus();
+  });
+});
+
+const optionList = [
+  'have to',
+  "don't have to",
+  "can't",
+  "don't need to",
+  "mustn't",
+  'must',
+  'need to'
+];
+
+const exerciseData = [
+  {before:'You', after:'make the presentation in June.', answer:'have to'},
+  {before:'We', after:'do any homework.', answer:"don't have to"},
+  {before:'We', after:'eat in the classrooms.', answer:"can't"},
+  {before:'You', after:'bring a laptop to class.', answer:"don't need to"},
+  {before:'You', after:'use your mobile phone during exams.', answer:"mustn't"},
+  {before:'You', after:'arrive on time for class.', answer:'must'},
+  {before:'You', after:'have a reference from your teacher to join the programme.', answer:'need to'},
+  {before:'We', after:"tell the office if we can't come to a lesson.", answer:'must'}
+];
+
+const exerciseList = document.getElementById('exerciseList');
+
+exerciseData.forEach((item, index) => {
+  const row = document.createElement('div');
+  row.className = 'exercise-item';
+  row.dataset.index = index;
+
+  const number = document.createElement('span');
+  number.className = 'number';
+  number.textContent = index + 1;
+
+  const wrapper = document.createElement('div');
+
+  const main = document.createElement('div');
+  main.className = 'exercise-main';
+
+  const before = document.createElement('span');
+  before.textContent = item.before;
+
+  const select = document.createElement('select');
+  select.className = 'choice';
+  select.setAttribute('aria-label', `Question ${index + 1}`);
+
+  const placeholder = document.createElement('option');
+  placeholder.value = '';
+  placeholder.textContent = 'Choose...';
+  select.appendChild(placeholder);
+
+  optionList.forEach(option => {
+    const el = document.createElement('option');
+    el.value = option;
+    el.textContent = option;
+    select.appendChild(el);
+  });
+
+  const after = document.createElement('span');
+  after.textContent = item.after;
+
+  const feedback = document.createElement('div');
+  feedback.className = 'feedback';
+
+  select.addEventListener('change', () => {
+    row.classList.remove('good','bad');
+    feedback.textContent = '';
+    feedback.className = 'feedback';
+    document.getElementById('exerciseScore').textContent = '';
+  });
+
+  main.append(before, select, after);
+  wrapper.append(main, feedback);
+  row.append(number, wrapper);
+  exerciseList.appendChild(row);
+});
+
+document.getElementById('checkExercise').addEventListener('click', () => {
+  let score = 0;
+  document.querySelectorAll('.exercise-item').forEach((row, index) => {
+    const select = row.querySelector('select');
+    const feedback = row.querySelector('.feedback');
+    const correct = select.value === exerciseData[index].answer;
+
+    row.classList.remove('good','bad');
+    feedback.className = 'feedback';
+
+    if (correct) {
+      score++;
+      row.classList.add('good');
+      feedback.textContent = 'Correct.';
+      feedback.classList.add('correct');
+    } else {
+      row.classList.add('bad');
+      feedback.textContent = select.value ? 'Try again.' : 'Choose an answer.';
+      feedback.classList.add('incorrect');
+    }
+  });
+
+  const scoreBox = document.getElementById('exerciseScore');
+  scoreBox.textContent = `${score} / ${exerciseData.length} correct`;
+  scoreBox.className = 'score ' + (score === exerciseData.length ? 'good' : 'bad');
+});
+
+document.getElementById('showAnswers').addEventListener('click', () => {
+  const key = document.getElementById('answerKey');
+  const visible = key.classList.toggle('show');
+  document.getElementById('showAnswers').textContent = visible ? 'Hide answers' : 'Show answers';
+});
+
+document.getElementById('resetExercise').addEventListener('click', () => {
+  document.querySelectorAll('.exercise-item').forEach(row => {
+    row.classList.remove('good','bad');
+    row.querySelector('select').value = '';
+    const feedback = row.querySelector('.feedback');
+    feedback.textContent = '';
+    feedback.className = 'feedback';
+  });
+  document.getElementById('exerciseScore').textContent = '';
+  document.getElementById('answerKey').classList.remove('show');
+  document.getElementById('showAnswers').textContent = 'Show answers';
+});
+</script>
+
+<script>
+const skillsFlashcardData = [["being a good leader", "быть хорошим руководителем"], ["being confident in yourself", "быть уверенным в себе"], ["making decisions", "принимать решения"], ["managing (tight) schedules", "управлять плотным графиком"], ["persuading people to do things", "убеждать людей что-либо делать"], ["taking responsibility", "брать на себя ответственность"], ["working well under pressure", "хорошо работать в условиях стресса"], ["solving problems", "решать проблемы"], ["being reliable", "быть надёжным"], ["managing a team", "руководить командой"], ["multitasking", "выполнять несколько задач одновременно"], ["setting goals", "ставить цели"], ["working hard", "усердно работать"]];
+const sentenceFlashcardData = [["I am often late for things.", "Я часто опаздываю."], ["I often need to rush to get to places or to finish things.", "Мне часто приходится торопиться, чтобы куда-то успеть или закончить дела."], ["I usually make a list of things I need to do during the day.", "Я обычно составляю список дел, которые мне нужно сделать в течение дня."], ["I hardly ever do everything I plan to do in a day.", "Мне почти никогда не удаётся сделать всё, что я планирую на день."], ["I always do things which are a priority first.", "Я всегда сначала делаю то, что является приоритетным."], ["I often delay doing things I don’t like doing.", "Я часто откладываю дела, которые мне не нравится делать."], ["I never write down any appointments or things I arrange in a diary.", "Я никогда не записываю встречи или запланированные дела в ежедневник."], ["I occasionally miss appointments because I forget I have them.", "Иногда я пропускаю встречи, потому что забываю о них."], ["I sometimes stay up late to finish things.", "Иногда я не ложусь спать допоздна, чтобы закончить дела."], ["If I’m finding something very difficult to do, I usually take a break.", "Если мне что-то очень трудно делать, я обычно делаю перерыв."]];
+let flashcardDirection = 'en-ru';
+
+function createFlashcard(item, index, groupName) {
+  const card = document.createElement('button');
+  card.type = 'button';
+  card.className = 'flashcard';
+  card.dataset.group = groupName;
+  card.dataset.index = String(index);
+
+  const front = flashcardDirection === 'en-ru' ? item[0] : item[1];
+  const back = flashcardDirection === 'en-ru' ? item[1] : item[0];
+
+  card.innerHTML = `
+    <span class="flashcard-number">${index + 1}</span>
+    <span class="flashcard-inner">
+      <span class="flashcard-front">${front}</span>
+      <span class="flashcard-back">${back}</span>
+    </span>
+  `;
+
+  card.addEventListener('click', () => {
+    card.classList.toggle('revealed');
+    updateFlashcardProgress();
+  });
+
+  return card;
+}
+
+function renderFlashcards() {
+  const skillsHost = document.getElementById('skillsFlashcards');
+  const sentenceHost = document.getElementById('sentenceFlashcards');
+  skillsHost.innerHTML = '';
+  sentenceHost.innerHTML = '';
+
+  skillsFlashcardData.forEach((item, index) => {
+    skillsHost.appendChild(createFlashcard(item, index, 'skills'));
+  });
+
+  sentenceFlashcardData.forEach((item, index) => {
+    sentenceHost.appendChild(createFlashcard(item, index, 'sentences'));
+  });
+
+  updateFlashcardProgress();
+}
+
+function updateFlashcardProgress() {
+  const total = document.querySelectorAll('.flashcard').length;
+  const revealed = document.querySelectorAll('.flashcard.revealed').length;
+  document.getElementById('flashcardProgress').textContent =
+    `${revealed} / ${total} revealed`;
+}
+
+document.querySelectorAll('.direction-btn').forEach(button => {
+  button.addEventListener('click', () => {
+    flashcardDirection = button.dataset.direction;
+    document.querySelectorAll('.direction-btn').forEach(item => {
+      item.classList.toggle('active', item === button);
+    });
+    renderFlashcards();
+  });
+});
+
+document.getElementById('revealAllCards').addEventListener('click', () => {
+  document.querySelectorAll('.flashcard').forEach(card => card.classList.add('revealed'));
+  updateFlashcardProgress();
+});
+
+document.getElementById('resetCards').addEventListener('click', () => {
+  document.querySelectorAll('.flashcard').forEach(card => card.classList.remove('revealed'));
+  updateFlashcardProgress();
+});
+
+renderFlashcards();
+</script>
+</body>
+</html>
