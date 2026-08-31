@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Shopping · Translation Warm-up</title>
+<style>
+:root{
+ --bg:#07131f;--panel:#0e2030;--panel2:#0a1825;--line:#28465b;
+ --text:#f4f7f9;--muted:#9caeba;--accent:#f08a36;--green:#79d9ad;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:linear-gradient(180deg,#06111b,#0a1825 45%,#06111b);color:var(--text);
+font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;-webkit-text-size-adjust:100%}
+button{font:inherit;touch-action:manipulation}
+.wrap{width:min(860px,calc(100% - 18px));margin:auto;padding:24px 0 48px}
+.hero{padding:24px;border:1px solid var(--line);border-radius:24px;background:
+linear-gradient(135deg,rgba(240,138,54,.12),transparent 38%),linear-gradient(180deg,var(--panel),var(--panel2));margin-bottom:15px}
+.kicker{font-size:12px;font-weight:900;letter-spacing:.08em;color:#ffc99f}
+h1{font-size:clamp(32px,7vw,56px);line-height:1;letter-spacing:-.035em;margin:10px 0 8px}
+.hero p{margin:0;color:#c4d1da;font-size:16px}
+.progress{margin-top:16px}
+.progress-meta{display:flex;justify-content:space-between;gap:10px;color:#b5c5cf;font-size:12px;font-weight:800}
+.bar{height:10px;border-radius:999px;background:#07131e;border:1px solid #2d4b61;overflow:hidden;margin-top:7px}
+.bar>div{height:100%;width:0;background:linear-gradient(90deg,var(--accent),#ffb05d);transition:width .25s ease}
+.list{display:grid;gap:10px}
+.card{border:1px solid var(--line);border-radius:18px;background:#0a1a28;overflow:hidden}
+.ru-btn{width:100%;display:grid;grid-template-columns:42px 1fr auto;gap:12px;align-items:center;text-align:left;
+padding:15px;border:0;background:transparent;color:var(--text);cursor:pointer}
+.ru-btn:hover{background:rgba(255,255,255,.02)}
+.num{width:38px;height:38px;border-radius:12px;background:var(--accent);display:grid;place-items:center;color:#111;font-weight:950}
+.ru{font-size:18px;font-weight:760;line-height:1.4}
+.tap{font-size:11px;color:#859cab;white-space:nowrap}
+.answer{display:none;padding:0 15px 15px 69px}
+.answer.show{display:block}
+.answer-label{font-size:10px;font-weight:950;letter-spacing:.1em;color:var(--green);margin-bottom:5px}
+.en{font-size:19px;line-height:1.45;font-weight:850;color:#fff}
+.speak{margin-top:9px;border:1px solid #35566c;background:#102a3d;color:#e9f2f6;padding:7px 10px;border-radius:9px;font-weight:800;cursor:pointer}
+.card.open{border-color:rgba(121,217,173,.45)}
+.card.open .num{background:var(--green)}
+.footer{margin-top:15px;padding:12px 14px;border-left:4px solid var(--accent);background:rgba(240,138,54,.06);border-radius:0 12px 12px 0;color:#c8d4dc;font-size:13px}
+@media(max-width:600px){
+ .wrap{width:calc(100% - 12px);padding-top:10px}
+ .hero{padding:18px;border-radius:19px}
+ .ru-btn{grid-template-columns:38px 1fr;gap:10px;padding:13px}
+ .tap{grid-column:2;font-size:10px;margin-top:-6px}
+ .ru{font-size:17px}
+ .answer{padding:0 13px 14px 61px}
+ .en{font-size:18px}
+}
+@media(max-width:390px){
+ h1{font-size:35px}
+ .ru{font-size:16px}
+ .en{font-size:17px}
+}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <section class="hero">
+    <div class="kicker">SHOPPING · TRANSLATION WARM-UP</div>
+    <h1>Translate into English</h1>
+    <p>Сначала переведите предложение вслух. Затем нажмите на него и проверьте английский вариант.</p>
+    <div class="progress">
+      <div class="progress-meta"><span>Открыто ответов</span><span id="count">0 / 10</span></div>
+      <div class="bar"><div id="bar"></div></div>
+    </div>
+  </section>
+
+  <section class="list">
+    
+    <article class="card" data-card="1">
+      <button type="button" class="ru-btn" aria-expanded="false" data-target="answer-1">
+        <span class="num">1</span>
+        <span class="ru">Камеры, которую я хотел, не было в наличии.</span>
+        <span class="tap">нажмите, чтобы проверить</span>
+      </button>
+      <div class="answer" id="answer-1">
+        <div class="answer-label">ENGLISH</div>
+        <div class="en">The camera I wanted was out of stock.</div>
+        <button type="button" class="speak" data-text="The camera I wanted was out of stock.">🔊 Listen</button>
+      </div>
+    </article>
+    
+    <article class="card" data-card="2">
+      <button type="button" class="ru-btn" aria-expanded="false" data-target="answer-2">
+        <span class="num">2</span>
+        <span class="ru">Она была на распродаже. Она стоила 50 фунтов — цена была снижена с 99 фунтов.</span>
+        <span class="tap">нажмите, чтобы проверить</span>
+      </button>
+      <div class="answer" id="answer-2">
+        <div class="answer-label">ENGLISH</div>
+        <div class="en">It was in a sale. It was £50 — reduced from £99.</div>
+        <button type="button" class="speak" data-text="It was in a sale. It was £50 — reduced from £99.">🔊 Listen</button>
+      </div>
+    </article>
+    
+    <article class="card" data-card="3">
+      <button type="button" class="ru-btn" aria-expanded="false" data-target="answer-3">
+        <span class="num">3</span>
+        <span class="ru">Их служба доставки была очень надёжной.</span>
+        <span class="tap">нажмите, чтобы проверить</span>
+      </button>
+      <div class="answer" id="answer-3">
+        <div class="answer-label">ENGLISH</div>
+        <div class="en">Their delivery service was very reliable.</div>
+        <button type="button" class="speak" data-text="Their delivery service was very reliable.">🔊 Listen</button>
+      </div>
+    </article>
+    
+    <article class="card" data-card="4">
+      <button type="button" class="ru-btn" aria-expanded="false" data-target="answer-4">
+        <span class="num">4</span>
+        <span class="ru">Курьер уронил её.</span>
+        <span class="tap">нажмите, чтобы проверить</span>
+      </button>
+      <div class="answer" id="answer-4">
+        <div class="answer-label">ENGLISH</div>
+        <div class="en">The delivery man dropped it.</div>
+        <button type="button" class="speak" data-text="The delivery man dropped it.">🔊 Listen</button>
+      </div>
+    </article>
+    
+    <article class="card" data-card="5">
+      <button type="button" class="ru-btn" aria-expanded="false" data-target="answer-5">
+        <span class="num">5</span>
+        <span class="ru">У них был действительно широкий выбор.</span>
+        <span class="tap">нажмите, чтобы проверить</span>
+      </button>
+      <div class="answer" id="answer-5">
+        <div class="answer-label">ENGLISH</div>
+        <div class="en">They had a really wide selection.</div>
+        <button type="button" class="speak" data-text="They had a really wide selection.">🔊 Listen</button>
+      </div>
+    </article>
+    
+    <article class="card" data-card="6">
+      <button type="button" class="ru-btn" aria-expanded="false" data-target="answer-6">
+        <span class="num">6</span>
+        <span class="ru">Когда я достал её из коробки, я обнаружил, что она повреждена.</span>
+        <span class="tap">нажмите, чтобы проверить</span>
+      </button>
+      <div class="answer" id="answer-6">
+        <div class="answer-label">ENGLISH</div>
+        <div class="en">When I took it out of the box, I found it was damaged.</div>
+        <button type="button" class="speak" data-text="When I took it out of the box, I found it was damaged.">🔊 Listen</button>
+      </div>
+    </article>
+    
+    <article class="card" data-card="7">
+      <button type="button" class="ru-btn" aria-expanded="false" data-target="answer-7">
+        <span class="num">7</span>
+        <span class="ru">Я вернул её и получил деньги обратно.</span>
+        <span class="tap">нажмите, чтобы проверить</span>
+      </button>
+      <div class="answer" id="answer-7">
+        <div class="answer-label">ENGLISH</div>
+        <div class="en">I returned it and got my money back.</div>
+        <button type="button" class="speak" data-text="I returned it and got my money back.">🔊 Listen</button>
+      </div>
+    </article>
+    
+    <article class="card" data-card="8">
+      <button type="button" class="ru-btn" aria-expanded="false" data-target="answer-8">
+        <span class="num">8</span>
+        <span class="ru">Она мне не подошла по размеру. Она была немного мала.</span>
+        <span class="tap">нажмите, чтобы проверить</span>
+      </button>
+      <div class="answer" id="answer-8">
+        <div class="answer-label">ENGLISH</div>
+        <div class="en">It didn’t fit me. It was a bit too small.</div>
+        <button type="button" class="speak" data-text="It didn’t fit me. It was a bit too small.">🔊 Listen</button>
+      </div>
+    </article>
+    
+    <article class="card" data-card="9">
+      <button type="button" class="ru-btn" aria-expanded="false" data-target="answer-9">
+        <span class="num">9</span>
+        <span class="ru">Это была выгодная покупка. Я предложил за неё двадцать фунтов на eBay — и выиграл.</span>
+        <span class="tap">нажмите, чтобы проверить</span>
+      </button>
+      <div class="answer" id="answer-9">
+        <div class="answer-label">ENGLISH</div>
+        <div class="en">It was a bargain. I bid twenty pounds for it on eBay — and won.</div>
+        <button type="button" class="speak" data-text="It was a bargain. I bid twenty pounds for it on eBay — and won.">🔊 Listen</button>
+      </div>
+    </article>
+    
+    <article class="card" data-card="10">
+      <button type="button" class="ru-btn" aria-expanded="false" data-target="answer-10">
+        <span class="num">10</span>
+        <span class="ru">Она стоила дорого, но это была моя собственная вина. Я не проверил стоимость доставки.</span>
+        <span class="tap">нажмите, чтобы проверить</span>
+      </button>
+      <div class="answer" id="answer-10">
+        <div class="answer-label">ENGLISH</div>
+        <div class="en">It cost a lot, but it was my own fault. I didn’t check the delivery fee.</div>
+        <button type="button" class="speak" data-text="It cost a lot, but it was my own fault. I didn’t check the delivery fee.">🔊 Listen</button>
+      </div>
+    </article>
+    
+  </section>
+
+  <div class="footer">Лучше сначала дать полный ответ вслух, а не просто вспомнить отдельное слово.</div>
+</main>
+
+<script>
+const cards=[...document.querySelectorAll('.card')];
+function updateProgress(){
+  const n=cards.filter(c=>c.classList.contains('open')).length;
+  document.getElementById('count').textContent=n+' / '+cards.length;
+  document.getElementById('bar').style.width=(n/cards.length*100)+'%';
+}
+document.querySelectorAll('.ru-btn').forEach(btn=>btn.addEventListener('click',()=>{
+  const ans=document.getElementById(btn.dataset.target);
+  const card=btn.closest('.card');
+  ans.classList.toggle('show');
+  card.classList.toggle('open',ans.classList.contains('show'));
+  btn.setAttribute('aria-expanded',ans.classList.contains('show')?'true':'false');
+  updateProgress();
+}));
+function speak(text){
+  if(!('speechSynthesis' in window))return;
+  speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(text);
+  u.lang='en-GB';u.rate=.86;
+  const voices=speechSynthesis.getVoices();
+  const v=voices.find(x=>x.lang==='en-GB')||voices.find(x=>/^en/i.test(x.lang));
+  if(v)u.voice=v;
+  speechSynthesis.speak(u);
+}
+document.querySelectorAll('.speak').forEach(btn=>btn.addEventListener('click',()=>speak(btn.dataset.text)));
+updateProgress();
+</script>
+</body>
+</html>

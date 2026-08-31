@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Shopping · RU → EN Questions</title>
+<style>
+:root{--bg:#07131f;--panel:#0a1a28;--line:#2b4b61;--text:#f4f7f9;--muted:#8199a8;--orange:#f28a34;--green:#79d9ad}
+*{box-sizing:border-box}
+body{margin:0;background:linear-gradient(180deg,#06111b,#0a1825 55%,#06111b);color:var(--text);font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;-webkit-text-size-adjust:100%}
+button{font:inherit;touch-action:manipulation}
+.wrap{width:min(1180px,calc(100% - 24px));margin:auto;padding:28px 0 42px}
+.note{margin-bottom:16px;padding:15px 16px;border-left:4px solid var(--green);border-radius:0 14px 14px 0;background:#122a38;font-size:18px;line-height:1.45}
+.list{display:grid;gap:12px}
+.card{border:1px solid var(--line);border-radius:19px;background:var(--panel);overflow:hidden}
+.question{width:100%;display:grid;grid-template-columns:44px 1fr auto;gap:14px;align-items:center;padding:16px;border:0;background:transparent;color:var(--text);text-align:left;cursor:pointer}
+.question:hover{background:rgba(255,255,255,.02)}
+.num{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;background:var(--orange);color:#111;font-weight:950;font-size:18px}
+.ru{font-size:19px;line-height:1.45;font-weight:780}
+.hint{color:var(--muted);font-size:11px;white-space:nowrap}
+.answer{display:none;padding:0 16px 16px 74px}
+.answer.show{display:block}
+.label{color:var(--green);font-size:10px;font-weight:950;letter-spacing:.1em}
+.en{margin-top:4px;font-size:19px;line-height:1.45;font-weight:850}
+.listen{margin-top:9px;border:1px solid #355970;border-radius:9px;background:#102b3e;color:#edf5f8;padding:7px 10px;font-weight:800;cursor:pointer}
+.card.open{border-color:rgba(121,217,173,.45)}
+.card.open .num{background:var(--green)}
+@media(max-width:650px){
+  .wrap{width:calc(100% - 12px);padding-top:12px}
+  .note{font-size:16px;padding:13px 14px}
+  .question{grid-template-columns:38px 1fr;gap:10px;padding:13px}
+  .num{width:36px;height:36px;font-size:16px}
+  .ru{font-size:17px}
+  .hint{grid-column:2;margin-top:-5px}
+  .answer{padding:0 13px 14px 61px}
+  .en{font-size:17px}
+}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <div class="note">Сначала студент переводит каждый вопрос вслух. Английский открывается только после попытки.</div>
+  <section class="list">
+    <article class="card">
+      <button type="button" class="question" data-target="answer-1" aria-expanded="false">
+        <span class="num">1</span>
+        <span class="ru">Вы когда-нибудь что-нибудь покупали или продавали на eBay или похожем сайте? Что вы покупали или продавали?</span>
+        <span class="hint">Проверить английский</span>
+      </button>
+      <div class="answer" id="answer-1">
+        <div class="label">ENGLISH</div>
+        <div class="en">Have you ever bought or sold anything on eBay or a similar website? What did you buy or sell?</div>
+        <button type="button" class="listen" data-say="Have you ever bought or sold anything on eBay or a similar website? What did you buy or sell?">🔊 Listen</button>
+      </div>
+    </article>
+    
+    <article class="card">
+      <button type="button" class="question" data-target="answer-2" aria-expanded="false">
+        <span class="num">2</span>
+        <span class="ru">Вы когда-нибудь покупали что-нибудь онлайн, а потом сталкивались с проблемой? Что случилось? Что вы сделали?</span>
+        <span class="hint">Проверить английский</span>
+      </button>
+      <div class="answer" id="answer-2">
+        <div class="label">ENGLISH</div>
+        <div class="en">Have you ever bought something online and had a problem with it? What was it? What did you do?</div>
+        <button type="button" class="listen" data-say="Have you ever bought something online and had a problem with it? What was it? What did you do?">🔊 Listen</button>
+      </div>
+    </article>
+    
+    <article class="card">
+      <button type="button" class="question" data-target="answer-3" aria-expanded="false">
+        <span class="num">3</span>
+        <span class="ru">Вы когда-нибудь доходили до кассы в супермаркете и обнаруживали, что у вас недостаточно денег? Что вы делали?</span>
+        <span class="hint">Проверить английский</span>
+      </button>
+      <div class="answer" id="answer-3">
+        <div class="label">ENGLISH</div>
+        <div class="en">Have you ever got to the supermarket checkout and then found you didn’t have enough money? What did you do?</div>
+        <button type="button" class="listen" data-say="Have you ever got to the supermarket checkout and then found you didn’t have enough money? What did you do?">🔊 Listen</button>
+      </div>
+    </article>
+    
+    <article class="card">
+      <button type="button" class="question" data-target="answer-4" aria-expanded="false">
+        <span class="num">4</span>
+        <span class="ru">Вы когда-нибудь теряли банковскую карту? Где вы её потеряли? Вам удалось её вернуть?</span>
+        <span class="hint">Проверить английский</span>
+      </button>
+      <div class="answer" id="answer-4">
+        <div class="label">ENGLISH</div>
+        <div class="en">Have you ever lost a bank card? Where did you lose it? Did you get it back?</div>
+        <button type="button" class="listen" data-say="Have you ever lost a bank card? Where did you lose it? Did you get it back?">🔊 Listen</button>
+      </div>
+    </article>
+    
+    <article class="card">
+      <button type="button" class="question" data-target="answer-5" aria-expanded="false">
+        <span class="num">5</span>
+        <span class="ru">Вы когда-нибудь пытались вернуть что-нибудь в магазин без чека? Вам обменяли товар?</span>
+        <span class="hint">Проверить английский</span>
+      </button>
+      <div class="answer" id="answer-5">
+        <div class="label">ENGLISH</div>
+        <div class="en">Have you ever tried to take something back to a shop without the receipt? Did they change it?</div>
+        <button type="button" class="listen" data-say="Have you ever tried to take something back to a shop without the receipt? Did they change it?">🔊 Listen</button>
+      </div>
+    </article>
+    
+    <article class="card">
+      <button type="button" class="question" data-target="answer-6" aria-expanded="false">
+        <span class="num">6</span>
+        <span class="ru">Вы когда-нибудь спорили с продавцом-консультантом? Из-за чего был спор?</span>
+        <span class="hint">Проверить английский</span>
+      </button>
+      <div class="answer" id="answer-6">
+        <div class="label">ENGLISH</div>
+        <div class="en">Have you ever had an argument with a shop assistant? What was it about?</div>
+        <button type="button" class="listen" data-say="Have you ever had an argument with a shop assistant? What was it about?">🔊 Listen</button>
+      </div>
+    </article>
+    </section>
+</main>
+<script>
+function speak(text){
+  if(!('speechSynthesis' in window)) return;
+  speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(text);
+  u.lang='en-GB';u.rate=.86;
+  const voices=speechSynthesis.getVoices();
+  const v=voices.find(x=>x.lang==='en-GB')||voices.find(x=>/^en/i.test(x.lang));
+  if(v)u.voice=v;
+  speechSynthesis.speak(u);
+}
+document.querySelectorAll('.question').forEach(btn=>btn.addEventListener('click',()=>{
+  const box=document.getElementById(btn.dataset.target);
+  const card=btn.closest('.card');
+  box.classList.toggle('show');
+  card.classList.toggle('open',box.classList.contains('show'));
+  btn.setAttribute('aria-expanded',box.classList.contains('show')?'true':'false');
+}));
+document.querySelectorAll('.listen').forEach(btn=>btn.addEventListener('click',e=>{e.stopPropagation();speak(btn.dataset.say);}));
+</script>
+</body>
+</html>
